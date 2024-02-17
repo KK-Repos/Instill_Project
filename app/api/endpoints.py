@@ -31,8 +31,11 @@ async def def_word_meanings_from_dictionary(
         # Sync approach
         # all_meanings = [await dictionary_service.get_dictionary_meaning(word) for word in words]
        
+        unique_words = list(set(words))
+        logger.info(f"getting word meaning for: {unique_words}")
+
         # Async Approach
-        all_coroutines = [create_task(dictionary_service.get_dictionary_meaning_async(word)) for word in words]
+        all_coroutines = [create_task(dictionary_service.get_dictionary_meaning_async(word)) for word in unique_words]
         all_meanings = await gather(*all_coroutines)
         
        
