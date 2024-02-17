@@ -6,11 +6,10 @@ from test.assertion import assert_status_code, assert_word_info, assert_word_mea
 from app.config import BASE_URL,HOST_PORT,API_V1_STR, PASSWORD
 
 
-
 API_BASE_URL = f"{BASE_URL}:{HOST_PORT}{API_V1_STR}/get-word-meaning"
 
 
-def test_wrong_password_api_Call():
+def test_wrong_password_post_api():
     payload = {
         "words": ["car"],
         "password": "wrong_password"
@@ -26,7 +25,7 @@ def test_wrong_password_api_Call():
     assert "detail" in response_data, "Expected 'detail' key in response"
     assert response_data["detail"] == "Password is incorrect", "Incorrect password error message"
 
-def test_wrong_payload_api():
+def test_wrong_payload_post_api():
     payload = {
         "words": [0],
         "password": PASSWORD
@@ -34,7 +33,7 @@ def test_wrong_payload_api():
 
     response = requests.post(API_BASE_URL, json=payload)
 
-    assert response.status_code == 422, f"Unexpected status code: {response.status_code}"
+    assert_status_code(response,422)
     
     response_data = response.json()
     error_message = response_data['detail'][0]['msg']
@@ -44,7 +43,7 @@ def test_wrong_payload_api():
     print("[response_data]",error_message)
 
 
-def test_get_word_meaning():
+def test_valid_get_word_post_api():
     payload = {
         "words": ["car"],
         "password": PASSWORD
@@ -52,7 +51,7 @@ def test_get_word_meaning():
 
     response = requests.post(API_BASE_URL, json=payload)
 
-    assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    assert_status_code(response,200)
 
     response_data = response.json()
 
@@ -67,7 +66,7 @@ def test_duplicate_payload():
 
     response = requests.post(API_BASE_URL, json=payload)
 
-    assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    assert_status_code(response,200)
 
     response_data = response.json()
 
@@ -85,7 +84,7 @@ def test_duplicate_payload():
     except requests.RequestException as e:
         assert False, f"Request failed: {e}"
 
-    assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    assert_status_code(response,200)
 
     response_data = response.json()
 

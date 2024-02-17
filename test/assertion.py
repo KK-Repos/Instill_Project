@@ -18,7 +18,7 @@ def assert_word_meaning(response_data):
     assert "definitions" in meaning_info, "Expected 'definitions' key in meaning"
 
     assert meaning_info["part_of_speech"] == "noun", "Expected part of speech to be 'noun'"
-    assert len(meaning_info["definitions"]) == 12, "Expected 13 definitions for the word 'car'"
+    assert len(meaning_info["definitions"]) == 12, "Expected 12 definitions for the word 'car'"
 
     source = "https://en.wiktionary.org/wiki/car"
     assert source in response_data[0].get("source", []), f"Expected source '{source}' not found in the response"
